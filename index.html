@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>mulhm | Personal Site</title>
+  <meta name="description" content="mulhm's personal website">
+  <link rel="icon" type="image/png" href="aaa.jpg" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Reset & Base Styles */
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    html, body {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      font-family: 'Press Start 2P', monospace;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* Entry Screen */
+    #entry-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      text-shadow: 0 0 10px #fff, 0 0 5px #fff;
+      font-size: 1.5rem;
+      user-select: none;
+      background: #000;
+      z-index: 10000;
+      transition: opacity 0.5s ease;
+    }
+    
+    #entry-screen::before {
+      content: "↓";
+      position: absolute;
+      bottom: 20%;
+      animation: bounce 2s infinite;
+      opacity: 0.7;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    /* Main Content */
+    #main-content {
+      display: none;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+    }
+    
+    body.show-main #main-content { 
+      display: block; 
+    }
+    
+    body.show-main #entry-screen { 
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      z-index: 2;
+      max-width: 100%;
+    }
+    
+    .glow-img {
+      border-radius: 12px;
+      max-width: 240px;
+      width: 100%;
+      height: auto;
+      margin-bottom: 25px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .glow-img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+    
+    h1 {
+      font-size: 1.2rem;
+      text-shadow: 0 0 8px #fff, 0 0 3px #fff;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    /* Links Section */
+    .links {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+    }
+    
+    .links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.75rem;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 5px #fff;
+      padding: 8px 15px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      width: 100%;
+      max-width: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .links a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #fff, 0 0 5px #fff;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .links i {
+      margin-right: 8px;
+      color: #fff;
+      font-size: 1.1em;
+    }
+    
+    /* Volume Slider - Updated for top right position */
+    .volume-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .volume-container label {
+      color: #fff;
+      font-size: 0.6rem;
+      text-shadow: 0 0 5px #fff;
+    }
+    
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100px;
+      height: 8px;
+      border-radius: 5px;
+      background: linear-gradient(90deg, #fff 0%, #fff 100%);
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Snowflakes */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      width: 5px;
+      height: 5px;
+      background: #fff;
+      opacity: 0.7;
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: fall linear infinite;
+      z-index: 1;
+    }
+    
+    @keyframes fall {
+      to { transform: translateY(110vh); }
+    }
+    
+    /* Visit Counter */
+    #visit-label {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.8rem;
+      text-shadow: 0 0 8px #fff, 0 0 3px #fff;
+      z-index: 10000;
+      user-select: none;
+      cursor: default;
+    }
+    
+    /* Audio Error Message */
+    #audio-error {
+      position: fixed;
+      bottom: 130px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ff5555;
+      font-size: 0.7rem;
+      text-align: center;
+      display: none;
+      z-index: 1000;
+    }
+    
+    /* Manual Play Button */
+    #manual-play {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 10000;
+      display: none;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 600px) {
+      h1 { font-size: 1rem; }
+      .links a { font-size: 0.65rem; }
+      .glow-img { max-width: 180px; }
+      #entry-screen { font-size: 1.2rem; }
+      #visit-label { font-size: 0.6rem; }
+      .volume-container { 
+        top: 15px;
+        right: 15px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      h1 { font-size: 0.8rem; }
+      .links a { font-size: 0.55rem; padding: 6px 12px; }
+      .volume-container {
+        top: 10px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="entry-screen" onclick="enterSite()">
+    Click To Enter
+  </div>
+
+  <div id="visit-label">👁️ ...</div>
+  <div id="audio-error"></div>
+  <button id="manual-play">Click to Enable Audio</button>
+
+  <!-- Audio element with multiple sources -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="aaa.mp3" type="audio/mpeg">
+    <source src="aaa.ogg" type="audio/ogg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div class="volume-container">
+    <label for="volume-slider">Volume</label>
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+  </div>
+
+  <div id="main-content">
+    <div class="container">
+      <img src="aaa.jpg" alt="mulhm" class="glow-img" />
+      <h1>. مُلهم</h1>
+      <div class="links">
+        <a href="https://instagram.com/k0811k1" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://snapchat.com/add/s9t9l" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-snapchat"></i> Snapchat
+        </a>
+        <a href="https://canary.discord.com/channels/@me/1377712541039333416" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-discord"></i> Discord
+        </a>
+        <a href="https://www.tiktok.com/@cv7lll*7" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-tiktok"></i> TikTok
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Fetch visit count
+      fetchVisitCount();
+      
+      // Initialize audio with muted state
+      const audio = document.getElementById('bg-music');
+      audio.volume = 0.5;
+      
+      // Check audio support
+      checkAudioSupport();
+    });
+    
+    function fetchVisitCount() {
+      const endpoint = "https://script.google.com/macros/s/AKfycbwO4MtdoAvNTB0HpM5iPa97ccGODbHwkf4iSC0NU7PeNk78o2RglVxII6cWaYjz5G03/exec";
+      
+      fetch(endpoint)
+        .then(response => {
+          if (!response.ok) throw new Error('Network error');
+          return response.text();
+        })
+        .then(count => {
+          document.getElementById('visit-label').textContent = '👁️ ' + count;
+        })
+        .catch(() => {
+          document.getElementById('visit-label').textContent = '👁️ N/A';
+        });
+    }
+    
+    function checkAudioSupport() {
+      const audio = document.createElement('audio');
+      if (!audio.canPlayType) {
+        showAudioError("Your browser doesn't support audio playback");
+        return false;
+      }
+      return true;
+    }
+    
+    function showAudioError(message) {
+      const errorEl = document.getElementById('audio-error');
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+    }
+    
+    function enterSite() {
+      // Add class to show main content
+      document.body.classList.add('show-main');
+      
+      // Initialize audio
+      const audio = document.getElementById('bg-music');
+      const slider = document.getElementById('volume-slider');
+      
+      // Set initial volume
+      audio.volume = slider.value;
+      
+      // Try to play audio with user interaction
+      playAudioWithFallback(audio);
+      
+      // Create snowflakes
+      createSnowEffect();
+      
+      // Setup volume control
+      slider.addEventListener('input', () => {
+        audio.volume = slider.value;
+      });
+    }
+    
+    function playAudioWithFallback(audio) {
+      const playPromise = audio.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log("Audio playback started successfully");
+          })
+          .catch(error => {
+            console.error("Audio playback error:", error);
+            showAudioError("Click to enable audio");
+            
+            // Show manual play button
+            const playBtn = document.getElementById('manual-play');
+            playBtn.style.display = 'block';
+            playBtn.onclick = () => {
+              audio.play()
+                .then(() => {
+                  playBtn.style.display = 'none';
+                  document.getElementById('audio-error').style.display = 'none';
+                })
+                .catch(e => {
+                  showAudioError("Failed to play: " + e.message);
+                });
+            };
+          });
+      }
+    }
+    
+    function createSnowEffect() {
+      const createSnowflake = () => {
+        const snow = document.createElement("div");
+        snow.classList.add("snowflake");
+        
+        // Random properties
+        snow.style.left = Math.random() * 100 + "vw";
+        snow.style.width = (Math.random() * 5 + 3) + "px";
+        snow.style.height = snow.style.width;
+        snow.style.opacity = Math.random() * 0.7 + 0.3;
+        snow.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        snow.style.animationDelay = Math.random() * 5 + "s";
+        
+        document.body.appendChild(snow);
+        
+        // Remove snowflake after animation completes
+        setTimeout(() => {
+          snow.remove();
+        }, parseFloat(snow.style.animationDuration) * 1000);
+      };
+      
+      // Create initial snowflakes
+      for (let i = 0; i < 20; i++) {
+        setTimeout(createSnowflake, i * 300);
+      }
+      
+      // Continue creating snowflakes
+      setInterval(createSnowflake, 300);
+    }
+  </script>
+</body>
+</html>
